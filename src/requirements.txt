@@ -1,2 +1,0 @@
-numpy~=1.21.0  # for matrix based calculations on the cell automata
-matplotlib~=3.5.0  # for simulation gui

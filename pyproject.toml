@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "msc-computational-biology-cellular-automata"
+version = "1.0.0"
+description = "Stripe-forming two-dimensional cellular automata"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Kobie Hazon" },
+    { name = "Daniel Ben Zion" },
+]
+dependencies = [
+    "matplotlib>=3.7,<4",
+    "numpy>=1.24,<3",
+]
+
+[project.scripts]
+cellular-automata = "cell_automata.cli:cli"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.12",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cell_automata"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+ignore = ["E501"]

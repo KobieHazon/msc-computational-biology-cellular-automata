@@ -1,57 +1,64 @@
-"""
-Utils for cell automata module
-"""
-from typing import Dict, Optional, Set, Tuple
+"""Shared utilities for cellular-automata implementations."""
+
+from __future__ import annotations
+
+from collections.abc import Collection, Mapping
 
 import numpy as np
+import numpy.typing as npt
+
+from .consts import CellIndex
+
+RandomGenerator = np.random.Generator | np.random.RandomState
 
 
-def get_balanced_random_grid(grid_width: int, grid_height: int) -> np.ndarray:
-    """
-    Returns a balanced randomized 2d numpy array
-    :param grid_width: width in cells
-    :param grid_height: height in cells
-    :return: balanced random grid, balanced = the number of white and black cells are equal
-    """
-    grid = np.zeros((grid_width, grid_height), dtype=bool)
+def get_balanced_random_grid(
+    grid_width: int,
+    grid_height: int,
+    random_generator: RandomGenerator | None = None,
+) -> npt.NDArray[np.bool_]:
+    """Return a random grid containing equal numbers of both cell states."""
     grid_elements = grid_width * grid_height
-    indices = np.random.permutation(grid_elements)
-    grid.ravel()[indices[:grid_elements // 2]] = True
+    if grid_width <= 0 or grid_height <= 0:
+        raise ValueError("grid dimensions must be positive")
+    if grid_elements % 2:
+        raise ValueError("a balanced grid requires an even number of cells")
+
+    grid = np.zeros((grid_height, grid_width), dtype=bool)
+    if random_generator is None:
+        indices = np.random.permutation(grid_elements)
+    else:
+        indices = random_generator.permutation(grid_elements)
+    grid.ravel()[indices[: grid_elements // 2]] = True
     return grid
 
 
 class TargetDistanceCalculator:
-    """
-    Util class for calculating the distance of a numpy array from target states, using levenshtein distance
-    """
+    """Calculate Hamming distances from neighborhood target states."""
 
-    def __init__(self, grid: np.ndarray, target_grids: Dict[bool, np.ndarray]):
-        """
-        :param grid: grid to calculate distance for
-        :param target_grids: the target grids for every value of the current cell
-        """
+    def __init__(
+        self,
+        grid: npt.NDArray[np.bool_],
+        target_grids: Mapping[bool, npt.NDArray[np.bool_]],
+    ):
         self._grid = grid
         self._target_neighborhoods = target_grids
 
-    def is_on_target(self, value: Optional[bool] = None) -> bool:
-        """
-        is the current grid already on one of the targets
-        :param value: current middle value
-        """
+    def is_on_target(self, value: bool | None = None) -> bool:
+        """Return whether the neighborhood matches one requested target."""
         if value is None:
-            return (np.array_equal(self._grid, self._target_neighborhoods[True]) or
-                    np.array_equal(self._grid, self._target_neighborhoods[False]))
-
+            return any(
+                np.array_equal(self._grid, target) for target in self._target_neighborhoods.values()
+            )
         return np.array_equal(self._grid, self._target_neighborhoods[value])
 
-    def get_distance(self, distance_indices: Set[Tuple[int, int]]) -> Dict[bool, int]:
-        """
-        Returns the distance from target states for each of the different values for the cell
-        :param distance_indices: indices to check the distance on
-        :return: dictionary containing te distances for a True/False cell value
-        """
-        target_distances: Dict[bool, int] = {
-            True: sum(self._target_neighborhoods[True][index] != self._grid[index] for index in distance_indices)
+    def get_distance(self, distance_indices: Collection[CellIndex]) -> dict[bool, int]:
+        """Return target-state mismatch counts over selected cells."""
+        true_distance = sum(
+            bool(self._target_neighborhoods[True][index] != self._grid[index])
+            for index in distance_indices
+        )
+        return {
+            True: true_distance,
+            False: len(distance_indices) - true_distance,
         }
-        target_distances[False] = len(distance_indices) - target_distances[True]  # the true/false states are opposite
-        return target_distances
