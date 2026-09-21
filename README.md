@@ -34,7 +34,7 @@ Run the same model without a graphical display:
 uv run cellular-automata --headless --seed 2024 --output run-results/reference.csv
 ```
 
-The recovered default configuration uses an `80 x 80` grid and a maximum of 250 generations. The historical runs did not record random seeds, so the regression test uses seed `2024` as a reproducible regression case; it reaches zero target distance and a stable state after 94 generations. Width must be even so the two alternating-stripe targets are well defined, and the grid must contain an even number of cells so its initial states can be balanced.
+The default configuration uses an `80 x 80` grid and a maximum of 250 generations. The historical runs did not record random seeds, so the regression test uses seed `2024` as a reproducible regression case; it reaches zero target distance and a stable state after 94 generations. Width must be even so the two alternating-stripe targets are well defined, and the grid must contain an even number of cells so its initial states can be balanced.
 
 Use `--width`, `--height`, and `--generations` to explore other configurations.
 
@@ -52,16 +52,10 @@ The suite covers deterministic initialization, rectangular grids, target-distanc
 
 - `assignment/`: supplied exercise brief, provided as a PDF
 - `src/cell_automata/`: cellular-automaton rules, simulator, GUI, and command-line interface
-- `results/run-histories/`: 17 recovered experiment histories from June 2024
+- `results/run-histories/`: 17 experiment histories from June 2024
 - `report.pdf`: coauthored analysis and plots
 - `tests/`: focused behavior and reproducibility checks
 
-## Implementation notes
-
-The maintained version packages the code, adds deterministic headless execution, corrects rectangular-grid construction, modernizes the Matplotlib integration, and adds tests and documentation without changing the recovered cellular-automaton rules.
-
 ## Authorship
 
-Solution, experiments, and report by Kobie Hazon and Daniel Ben Zion. The exercise brief is identified as supplied material solely to distinguish it from their work; this label does not assert ownership by a university or any other institution.
-
-No repository-wide license is declared because the repository combines original work with a supplied exercise brief whose reuse terms were not recorded.
+Solution, experiments, and report by Kobie Hazon and Daniel Ben Zion.

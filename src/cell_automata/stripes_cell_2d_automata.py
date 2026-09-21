@@ -34,7 +34,7 @@ class StripesCell2DAutomata(BaseCell2DAutomata):
         CellNeighborhoodIndices.LOWER_N_SHAPE,
     )
 
-    # Tie order is part of the recovered rule: horizontal directions are preferred.
+    # Tie order is part of the rule: horizontal directions are preferred.
     _DISTANCE_TEST_INDICES: ClassVar[tuple[Collection[CellIndex], ...]] = (
         CellNeighborhoodIndices.LEFT_INDICES,
         CellNeighborhoodIndices.RIGHT_INDICES,

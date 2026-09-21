@@ -57,7 +57,7 @@ def run_simulation(
 
 
 def write_distance_history(distances: tuple[int, ...], output_path: str | Path) -> Path:
-    """Write simulation target distances in the recovered CSV format."""
+    """Write simulation target distances in the CSV format."""
     destination = Path(output_path)
     destination.parent.mkdir(parents=True, exist_ok=True)
     with destination.open("w", encoding="utf-8", newline="") as output_file:
