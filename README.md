@@ -51,8 +51,8 @@ The suite covers deterministic initialization, rectangular grids, target-distanc
 ## Repository Structure
 
 - `assignment/`: supplied exercise brief, provided as a PDF
-- `src/cell_automata/`: cellular-automaton rules, simulator, GUI, and command-line interface
-- `results/run-histories/`: 17 experiment histories from June 2024
+- `src/`: cellular-automaton rules, simulator, GUI, and command-line interface
+- `results/`: 17 experiment histories from June 2024
 - `report.pdf`: coauthored analysis and plots
 - `tests/`: focused behavior and reproducibility checks
 

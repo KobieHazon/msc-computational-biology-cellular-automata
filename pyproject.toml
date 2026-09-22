@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "msc-computational-biology-cellular-automata"
@@ -26,8 +26,9 @@ dev = [
     "ruff>=0.12",
 ]
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/cell_automata"]
+[tool.setuptools]
+packages = ["cell_automata"]
+package-dir = { cell_automata = "src" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
